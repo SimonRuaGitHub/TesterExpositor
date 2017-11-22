@@ -6,6 +6,9 @@
 package com.mycompany.testexpositor.services;
 
 import com.mycompany.testexpositor.contract.UsuarioContract;
+import com.mycompany.testexpositor.dao.UsuariosJpaController;
+import com.mycompany.testexpositor.entities.Usuarios;
+import java.util.List;
 
 /**
  *
@@ -13,12 +16,16 @@ import com.mycompany.testexpositor.contract.UsuarioContract;
  */
 public class UsuarioServices implements UsuarioContract
 {
-
+    UsuariosJpaController usuariosDAO;
+    
     public String dummy() 
     {
            return "conexion BackEnd exitosa";
     }
-
-
-    
+   
+    public List<Usuarios> getAllUsuarios()
+    {
+           usuariosDAO = new UsuariosJpaController();
+           return usuariosDAO.findUsuariosEntities();
+    }
 }
