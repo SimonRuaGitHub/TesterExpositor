@@ -35,12 +35,12 @@ public interface UsuarioContract
      @Produces(MediaType.APPLICATION_JSON)
      public List<Usuarios> getAllUsuarios();
      
-     /**
-      * 
+    /**
+     * 
      * @param username
      * @param password
-      * @return flag
-      */
+     * @return flag
+     */
      @Path("/verifyUser")
      @POST
      @Produces(MediaType.TEXT_PLAIN)
