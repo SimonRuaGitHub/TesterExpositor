@@ -28,4 +28,9 @@ public class UsuarioServices implements UsuarioContract
            usuariosDAO = new UsuariosJpaController();
            return usuariosDAO.findUsuariosEntities();
     }
+
+    public String verifyUserExist(String username, String password) 
+    {
+           return "1";
+    }
 }
