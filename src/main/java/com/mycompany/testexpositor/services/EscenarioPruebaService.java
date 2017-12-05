@@ -5,6 +5,7 @@
  */
 package com.mycompany.testexpositor.services;
 
+import com.museumapp.ScenariosProcess.OpenSessionExecution;
 import com.mycompany.testexpositor.contract.EscenarioPruebaContract;
 /**
  *
@@ -18,7 +19,9 @@ public class EscenarioPruebaService implements EscenarioPruebaContract
 
     public String testLogginSession(String casoPrueba) 
     {
-          boolean result = true;
+          OpenSessionExecution openSessionExecution = new OpenSessionExecution();
+         
+          boolean result =  openSessionExecution.executeAutomatedOpeningSession(casoPrueba);
                   
           if(result == true)
               return "exitoso";
