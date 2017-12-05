@@ -31,6 +31,8 @@ public class UsuarioServices implements UsuarioContract
 
     public String verifyUserExist(String username, String password) 
     {
+           usuariosDAO = new UsuariosJpaController();
+           
            return "1";
     }
 }

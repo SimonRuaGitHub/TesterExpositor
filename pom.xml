@@ -73,6 +73,11 @@
         <artifactId>mysql-connector-java</artifactId>
         <version>5.1.6</version>
     </dependency>
+    <dependency>
+        <groupId>org.seleniumhq.selenium</groupId>
+        <artifactId>selenium-server</artifactId>
+        <version>3.8.1</version>
+    </dependency>
   </dependencies>
 
   <build>
