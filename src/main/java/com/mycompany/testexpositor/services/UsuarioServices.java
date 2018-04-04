@@ -61,11 +61,28 @@ public class UsuarioServices implements UsuarioContract
     public String verifyUserExist(JSONObject credentials) 
     {     
            JSONObject obj = new JSONObject();
+           String username = (String) credentials.get("username");
+           String password = (String) credentials.get("password");      
+           int result = 0;
 
            LOGGER.info("Usuario ingresado: "+credentials.get("username"));
            LOGGER.info("Contraseña ingresada: "+credentials.get("password"));
            
-           return "1";
+           usuariosDAO = new UsuariosJpaController();
+           int size = usuariosDAO.verifyUserExistByCredentials(username,password);
+
+           if(size == 1)
+           {
+               result = size;
+           }            
+           else 
+           {
+               result = 2;
+           }
+           
+           LOGGER.info("Verificacion de usuario: "+result);
+           
+           return String.valueOf(result);
     }
     
     
