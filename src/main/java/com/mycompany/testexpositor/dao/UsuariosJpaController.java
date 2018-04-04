@@ -149,10 +149,14 @@ public class UsuariosJpaController implements Serializable
         }
     }
     
-      public Usuarios findUsuarios(String nombre,String contrasena)
+      public int verifyUserExistByCredentials(String username,String password)
       {
                 EntityManager em = getEntityManager();
-                return new Usuarios();
+                Query query = em.createQuery("SELECT u FROM Usuarios u WHERE u.contrasena = :contrasena AND u.nombre = :nombre");
+                query.setParameter("nombre", username);
+                query.setParameter("contrasena", Integer.parseInt(password));
+                
+                return query.getResultList().size();
       }
     
     

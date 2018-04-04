@@ -106,6 +106,7 @@ public class FilterCORS implements Filter {
         
         HttpServletResponse hsr = (HttpServletResponse) response;
         hsr.addHeader("Access-Control-Allow-Origin", "*");
+        hsr.addHeader("Access-Control-Allow-Headers", "*");
         hsr.addHeader("Access-Control-Allow-Methods", "GET, POST");
         
         doBeforeProcessing(request, response);

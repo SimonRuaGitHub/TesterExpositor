@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import org.json.simple.JSONObject;
 
 /**
  *
@@ -43,6 +44,17 @@ public interface UsuarioContract
      */
      @Path("/verifyUser")
      @POST
+     @Produces(MediaType.APPLICATION_JSON)
+     public String verifyUserExist(@QueryParam("username")String user,@QueryParam("password") String pass);
+     
+         /**
+     * 
+     * @param username
+     * @param password
+     * @return flag
+     */
+     @Path("/verifyUserJson")
+     @POST
      @Produces(MediaType.TEXT_PLAIN)
-     public String verifyUserExist(@QueryParam("user")String username, @QueryParam("pass")String password);
+     public String verifyUserExist(JSONObject credentials);
 }

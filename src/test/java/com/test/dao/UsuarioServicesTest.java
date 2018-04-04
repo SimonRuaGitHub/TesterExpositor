@@ -5,6 +5,8 @@
  */
 package com.test.dao;
 
+import com.mycompany.testexpositor.contract.UsuarioContract;
+import com.mycompany.testexpositor.services.UsuarioServices;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -16,30 +18,25 @@ import static org.junit.Assert.*;
  *
  * @author simon.rua
  */
-public class NewEmptyJUnitTest {
+public class UsuarioServicesTest {
     
-    public NewEmptyJUnitTest() {
-    }
+    private static UsuarioContract usuarioServices;
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() 
+    {
+        usuarioServices = new UsuarioServices();
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() 
+    {
+        
     }
     
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+     @Test
+     public void TestVerifyUserService() 
+     {
+         usuarioServices.verifyUserExist("simonRL","1234");
+     }
 }
