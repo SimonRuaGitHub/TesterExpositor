@@ -14,7 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -22,22 +21,19 @@ import javax.persistence.criteria.Root;
  *
  * @author simon.rua
  */
-public class UsuariosJpaController implements Serializable 
-{
-    private final static String PERSISTANCE_UNIT = "DB_REMOTESTER";
-    private EntityManagerFactory emf = null;
-    
+public class UsuariosJpaController extends SuperiorJpaController implements Serializable 
+{ 
     public UsuariosJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     
-    public UsuariosJpaController()
-    {
-        this.emf = Persistence.createEntityManagerFactory(PERSISTANCE_UNIT);
-    }
-
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
+    }
+    
+    public UsuariosJpaController()
+    {
+           super();
     }
 
     public void create(Usuarios usuarios) throws PreexistingEntityException, Exception {
@@ -157,6 +153,20 @@ public class UsuariosJpaController implements Serializable
                 query.setParameter("contrasena", Integer.parseInt(password));
                 
                 return query.getResultList().size();
+      }
+      
+      
+      public Usuarios searchUserByCredentials(String username)
+      {
+             EntityManager em = getEntityManager();
+             Query query = em.createQuery("SELECT u FROM Usuarios u WHERE u.nombre = :nombre");
+             query.setParameter("nombre", username);
+             
+             List<Usuarios> usuariosList = query.getResultList();
+             
+             Usuarios usuario = usuariosList.get(0);
+             
+             return usuario;
       }
     
     

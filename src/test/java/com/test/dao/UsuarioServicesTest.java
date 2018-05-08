@@ -13,11 +13,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
  * @author simon.rua
  */
+//@Ignore
 public class UsuarioServicesTest {
     
     private static UsuarioContract usuarioServices;
@@ -37,6 +39,6 @@ public class UsuarioServicesTest {
      @Test
      public void TestVerifyUserService() 
      {
-         usuarioServices.verifyUserExist("simonRL","1234");
+         usuarioServices.verifyUserExist("simon","1234");
      }
 }

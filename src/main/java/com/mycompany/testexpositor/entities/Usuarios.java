@@ -6,14 +6,18 @@
 package com.mycompany.testexpositor.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -29,6 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Usuarios.findByCorreo", query = "SELECT u FROM Usuarios u WHERE u.correo = :correo"),
     @NamedQuery(name = "Usuarios.findByContrasena", query = "SELECT u FROM Usuarios u WHERE u.contrasena = :contrasena")})
 public class Usuarios implements Serializable {
+
+    @OneToMany(mappedBy = "codUsuario")
+    private List<Proyectos> proyectosList;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -114,6 +121,16 @@ public class Usuarios implements Serializable {
     @Override
     public String toString() {
         return "com.mycompany.testexpositor.entities.Usuarios[ codigo=" + codigo + " ]";
+    }
+
+    @XmlTransient
+    @JsonIgnore
+    public List<Proyectos> getProyectosList() {
+        return proyectosList;
+    }
+
+    public void setProyectosList(List<Proyectos> proyectosList) {
+        this.proyectosList = proyectosList;
     }
     
 }

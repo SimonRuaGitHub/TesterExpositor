@@ -3,6 +3,9 @@
   <persistence-unit name="DB_REMOTESTER" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.mycompany.testexpositor.entities.Usuarios</class>
+    <class>com.mycompany.testexpositor.entities.CasosPruebas</class>
+    <class>com.mycompany.testexpositor.entities.Proyectos</class>
+    <class>com.mycompany.testexpositor.entities.Parametros</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/appremotester?zeroDateTimeBehavior=convertToNull"/>

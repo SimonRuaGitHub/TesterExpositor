@@ -59,8 +59,7 @@ public class UsuarioServices implements UsuarioContract
     }
 
     public String verifyUserExist(JSONObject credentials) 
-    {     
-           JSONObject obj = new JSONObject();
+    {    
            String username = (String) credentials.get("username");
            String password = (String) credentials.get("password");      
            int result = 0;
