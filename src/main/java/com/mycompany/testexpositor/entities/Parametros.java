@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,8 +32,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Parametros.findByValor", query = "SELECT p FROM Parametros p WHERE p.valor = :valor")})
 public class Parametros implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "consecutivo")
+    private Integer consecutivo;
+
+    private static final long serialVersionUID = 1L;
+
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
@@ -78,10 +86,22 @@ public class Parametros implements Serializable {
         this.casoPruebacodigo = casoPruebacodigo;
     }
 
+    public Parametros(Integer consecutivo) {
+        this.consecutivo = consecutivo;
+    }
+
+    public Integer getConsecutivo() {
+        return consecutivo;
+    }
+
+    public void setConsecutivo(Integer consecutivo) {
+        this.consecutivo = consecutivo;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (nombre != null ? nombre.hashCode() : 0);
+        hash += (consecutivo != null ? consecutivo.hashCode() : 0);
         return hash;
     }
 
@@ -92,7 +112,7 @@ public class Parametros implements Serializable {
             return false;
         }
         Parametros other = (Parametros) object;
-        if ((this.nombre == null && other.nombre != null) || (this.nombre != null && !this.nombre.equals(other.nombre))) {
+        if ((this.consecutivo == null && other.consecutivo != null) || (this.consecutivo != null && !this.consecutivo.equals(other.consecutivo))) {
             return false;
         }
         return true;
@@ -100,7 +120,7 @@ public class Parametros implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.testexpositor.entities.Parametros[ nombre=" + nombre + " ]";
+        return "com.mycompany.testexpositor.entities.Parametros[ consecutivo=" + consecutivo + " ]";
     }
     
 }

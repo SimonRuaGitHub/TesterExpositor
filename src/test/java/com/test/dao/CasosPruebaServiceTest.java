@@ -9,10 +9,14 @@ import com.mycompany.testexpositor.entities.CasosPruebas;
 import com.mycompany.testexpositor.entities.Parametros;
 import com.mycompany.testexpositor.services.EscenarioPruebaService;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.logging.Logger;
 import org.json.JSONException;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -112,7 +116,7 @@ public class CasosPruebaServiceTest {
      {
              epServ = new EscenarioPruebaService();
              JSONObject cpJson = new JSONObject();
-             cpJson.put("codigoCaso","CP_01");
+             cpJson.put("codigoCaso","CP_03");
 
              List<Parametros> paramList = epServ.searchAllParametersByTc(cpJson);
              
@@ -123,6 +127,26 @@ public class CasosPruebaServiceTest {
              
              assertEquals(true, !paramList.isEmpty());
      }
-    
+     
+     @Test
+     public void testExecuteAutomationTcsSuite() throws ParseException
+     {
+             LinkedHashMap lhmOne = new LinkedHashMap();
+             lhmOne.put("codigoCaso","CP_01");
+             lhmOne.put("escenario","INGRESO_ROL");
+             
+             LinkedHashMap lhmTwo = new LinkedHashMap();
+             lhmTwo.put("codigoCaso","CP_03");
+             lhmTwo.put("escenario","REGISTRO_OBRA");
+
+             JSONArray cpsJsonArr = new JSONArray();
+             cpsJsonArr.add(lhmOne);
+             cpsJsonArr.add(lhmTwo);
+             
+             epServ = new EscenarioPruebaService();
+             List<CasosPruebas> cpsList = epServ.executeTestAutomation(cpsJsonArr);
+             
+             assertEquals("exitoso", cpsList.get(0).getResultado());
+     }
 
 }

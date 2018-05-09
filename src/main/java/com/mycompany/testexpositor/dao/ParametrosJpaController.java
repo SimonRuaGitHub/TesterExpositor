@@ -6,7 +6,6 @@
 package com.mycompany.testexpositor.dao;
 
 import com.mycompany.testexpositor.dao.exceptions.NonexistentEntityException;
-import com.mycompany.testexpositor.dao.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -36,7 +35,7 @@ public class ParametrosJpaController extends SuperiorJpaController implements Se
         return emf.createEntityManager();
     }
 
-    public void create(Parametros parametros) throws PreexistingEntityException, Exception {
+    public void create(Parametros parametros) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -52,11 +51,6 @@ public class ParametrosJpaController extends SuperiorJpaController implements Se
                 casoPruebacodigo = em.merge(casoPruebacodigo);
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findParametros(parametros.getNombre()) != null) {
-                throw new PreexistingEntityException("Parametros " + parametros + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -69,7 +63,7 @@ public class ParametrosJpaController extends SuperiorJpaController implements Se
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Parametros persistentParametros = em.find(Parametros.class, parametros.getNombre());
+            Parametros persistentParametros = em.find(Parametros.class, parametros.getConsecutivo());
             CasosPruebas casoPruebacodigoOld = persistentParametros.getCasoPruebacodigo();
             CasosPruebas casoPruebacodigoNew = parametros.getCasoPruebacodigo();
             if (casoPruebacodigoNew != null) {
@@ -89,7 +83,7 @@ public class ParametrosJpaController extends SuperiorJpaController implements Se
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                String id = parametros.getNombre();
+                Integer id = parametros.getConsecutivo();
                 if (findParametros(id) == null) {
                     throw new NonexistentEntityException("The parametros with id " + id + " no longer exists.");
                 }
@@ -102,7 +96,7 @@ public class ParametrosJpaController extends SuperiorJpaController implements Se
         }
     }
 
-    public void destroy(String id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -110,7 +104,7 @@ public class ParametrosJpaController extends SuperiorJpaController implements Se
             Parametros parametros;
             try {
                 parametros = em.getReference(Parametros.class, id);
-                parametros.getNombre();
+                parametros.getConsecutivo();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The parametros with id " + id + " no longer exists.", enfe);
             }
@@ -152,10 +146,23 @@ public class ParametrosJpaController extends SuperiorJpaController implements Se
         }
     }
 
-    public Parametros findParametros(String id) {
+    public Parametros findParametros(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Parametros.class, id);
+        } finally {
+            em.close();
+        }
+    }
+
+    public int getParametrosCount() {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            Root<Parametros> rt = cq.from(Parametros.class);
+            cq.select(em.getCriteriaBuilder().count(rt));
+            Query q = em.createQuery(cq);
+            return ((Long) q.getSingleResult()).intValue();
         } finally {
             em.close();
         }
@@ -171,19 +178,6 @@ public class ParametrosJpaController extends SuperiorJpaController implements Se
            List parametrosList = query.getResultList();
            
            return parametrosList;
-    }
-
-    public int getParametrosCount() {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Parametros> rt = cq.from(Parametros.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
-        } finally {
-            em.close();
-        }
     }
     
 }

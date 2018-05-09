@@ -6,6 +6,7 @@
 package com.mycompany.testexpositor.services;
 
 import com.museumapp.ScenariosProcess.OpenSessionExecution;
+import com.museumapp.ScenariosProcess.RegisteringPieceExecution;
 import com.mycompany.testexpositor.contract.EscenarioPruebaContract;
 import com.mycompany.testexpositor.dao.CasosPruebasJpaController;
 import com.mycompany.testexpositor.dao.ParametrosJpaController;
@@ -13,6 +14,7 @@ import com.mycompany.testexpositor.dao.ProyectosJpaController;
 import com.mycompany.testexpositor.entities.CasosPruebas;
 import com.mycompany.testexpositor.entities.Parametros;
 import com.mycompany.testexpositor.entities.Proyectos;
+import com.mycompany.testexpositor.objects.Automatizaciones;
 import com.mycompany.testexpositor.objects.Estados;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +67,24 @@ public class EscenarioPruebaService implements EscenarioPruebaContract
            
            return paramList;
     }
+    
+    public Map searchAllParametersMaps(String cpCodigo)
+    {
+            Map paramsMap = new HashMap();
+           
+            cpDao = new CasosPruebasJpaController();
+            CasosPruebas cp = cpDao.findCasosPruebas(cpCodigo);
+
+            paramDao = new ParametrosJpaController();
+            List<Parametros> paramList = paramDao.findParametrosByCasoPrueba(cp);
+            
+            for(Parametros p: paramList)
+                paramsMap.put(p.getNombre(), p.getValor());
+            
+            paramsMap.put("codigoCaso", cpCodigo);
+            
+            return paramsMap;
+    }
 
     public List<CasosPruebas> searchAllTestCasesByProject(JSONObject proyecto) 
     {
@@ -109,45 +129,41 @@ public class EscenarioPruebaService implements EscenarioPruebaContract
            {
                 LinkedHashMap hashMap = (LinkedHashMap) iterator.next();
                 LOGGER.info((String) hashMap.get("codigoCaso"));
-                LOGGER.info((String) hashMap.get("nombre"));
-                mapCasosPrueba.put((String) hashMap.get("codigoCaso"),(String) hashMap.get("nombre"));
+                LOGGER.info((String) hashMap.get("escenario"));
+                mapCasosPrueba.put((String) hashMap.get("codigoCaso"),(String) hashMap.get("escenario"));
            }
            
         for(String cp:mapCasosPrueba.keySet())
         {
            LOGGER.info("Descripcion: "+mapCasosPrueba.get(cp));
            String escenario = mapCasosPrueba.get(cp).toUpperCase();
+           
+           LOGGER.info("Escenario: "+escenario);
            CasosPruebas casoPrueba = new CasosPruebas();
            String resultStr = "";
            boolean result = false;
            boolean executed = false;
+           Map params = searchAllParametersMaps(cp);
            
-           if(escenario.trim().equalsIgnoreCase("validacion ingreso GC"))
+           if(escenario.trim().equalsIgnoreCase(Automatizaciones.INGRESO_ROL.toString()))
            {
                LOGGER.info("Ejecutando prueba automatizada de ingreso de gerente de catalogo");
                OpenSessionExecution openSessionExecution = new OpenSessionExecution();
-               result = openSessionExecution.executeAutomatedOpeningSession(cp);
+               result = openSessionExecution.executeAutomatedOpeningSession(params);
                executed = true;
            }
-           else if(escenario.trim().equalsIgnoreCase("validacion de usuario director museo"))
-           {
-                 LOGGER.info("Ejecutando prueba automatizada de director de museo");
-                 OpenSessionExecution openSessionExecution = new OpenSessionExecution();
-                 result = openSessionExecution.executeAutomatedOpeningSession(cp);  
-                 executed = true;
-           }
-           else if(escenario.trim().equalsIgnoreCase("validacion de registro de obra"))
+           else if(escenario.trim().equalsIgnoreCase(Automatizaciones.REGISTRO_OBRA.toString()))
            {
                LOGGER.info("Ejecutando prueba automatizada de registro de obra");
-               OpenSessionExecution openSessionExecution = new OpenSessionExecution();
-               result = openSessionExecution.executeAutomatedOpeningSession(cp); 
+               RegisteringPieceExecution registeringPieceExecution = new RegisteringPieceExecution();
+               result = registeringPieceExecution.executeAutomatedPieceRegistration(params);
                executed = true;
            }
-           else if(escenario.trim().equalsIgnoreCase("validacion de consulta de obras"))
+           else if(escenario.trim().equalsIgnoreCase(Automatizaciones.CONSULTA_OBRA.toString()))
            {
                LOGGER.info("Ejecutando prueba automatizada de consulta de obras");
                OpenSessionExecution openSessionExecution = new OpenSessionExecution();
-               result = openSessionExecution.executeAutomatedOpeningSession(cp);
+               result = openSessionExecution.executeAutomatedOpeningSession(params);
                executed = true;
            }
            
