@@ -19,7 +19,7 @@ import org.junit.Ignore;
  *
  * @author simon.rua
  */
-//@Ignore
+//s@Ignore
 public class UsuarioServicesTest {
     
     private static UsuarioContract usuarioServices;

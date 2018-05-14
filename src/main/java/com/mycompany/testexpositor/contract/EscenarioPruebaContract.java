@@ -59,4 +59,9 @@ public interface EscenarioPruebaContract
      @POST
      @Produces(MediaType.APPLICATION_JSON)
      public List<Parametros> searchAllParametersByTc(JSONObject cpJson);
+     
+     @Path("/updateParamsByTc")
+     @POST
+     @Produces(MediaType.TEXT_PLAIN)
+     public String updateAllParametersByTc(JSONObject parameters);
 }

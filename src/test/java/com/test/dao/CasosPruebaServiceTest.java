@@ -11,6 +11,8 @@ import com.mycompany.testexpositor.services.EscenarioPruebaService;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 import org.json.JSONException;
 import org.json.simple.JSONArray;
@@ -128,7 +130,7 @@ public class CasosPruebaServiceTest {
              assertEquals(true, !paramList.isEmpty());
      }
      
-     @Test
+      @Test
      public void testExecuteAutomationTcsSuite() throws ParseException
      {
              LinkedHashMap lhmOne = new LinkedHashMap();
@@ -147,6 +149,22 @@ public class CasosPruebaServiceTest {
              List<CasosPruebas> cpsList = epServ.executeTestAutomation(cpsJsonArr);
              
              assertEquals("exitoso", cpsList.get(0).getResultado());
+     }
+     
+     @Test
+     public void testEditParamsTcs()
+     {
+            JSONObject cpJson = new JSONObject();
+            cpJson.put("codigoCaso","CP_01");
+            cpJson.put("username","ramirezGC");
+            cpJson.put("password","123654");
+            
+            epServ = new EscenarioPruebaService();
+            epServ.updateAllParametersByTc(cpJson);
+            
+            Map paramsMap = epServ.searchAllParametersMaps(cpJson.get("codigoCaso").toString());
+
+            assertEquals(cpJson.get("username"),paramsMap.get("username"));
      }
 
 }

@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
 import org.json.simple.JSONObject;
 import java.util.logging.Logger;
 import org.json.simple.JSONArray;
@@ -65,6 +67,7 @@ public class EscenarioPruebaService implements EscenarioPruebaContract
            paramDao = new ParametrosJpaController();
            List<Parametros> paramList = paramDao.findParametrosByCasoPrueba(cp);
            
+           LOGGER.info("Retornando parametros: "+paramList.toString());
            return paramList;
     }
     
@@ -168,7 +171,7 @@ public class EscenarioPruebaService implements EscenarioPruebaContract
            }
            
            if(!executed)
-               resultStr = Estados.IMPEDIDO.toString().toLowerCase();
+               resultStr = Estados.Impedido.toString().toLowerCase();
            else           
                resultStr = establishStateResult(result);     
            
@@ -186,12 +189,14 @@ public class EscenarioPruebaService implements EscenarioPruebaContract
              String resultState;
              
              if(result)
-                 resultState = Estados.EXITOSO.toString().toLowerCase();
+                 resultState = Estados.Exitoso.toString().toLowerCase();
              else 
-                 resultState = Estados.FALLIDO.toString().toLowerCase();
+                 resultState = Estados.Fallido.toString().toLowerCase();
               
              return resultState;
     }
+    
+    
     
     
     public List<CasosPruebas> resultTestCasesDummy() 
@@ -204,5 +209,43 @@ public class EscenarioPruebaService implements EscenarioPruebaContract
            cpsList.add(cp);
            
            return cpsList;
+    }
+
+    public String updateAllParametersByTc(JSONObject paramsJson) 
+    {
+           paramDao = new ParametrosJpaController();
+           String cp = (String) paramsJson.get("codigoCaso");
+           String mensaje = "";
+           
+           LOGGER.info("Actualizando parametros para caso de prueba: "+cp);
+           List<Parametros> toBeReplacedParamList = searchAllParametersByTc(paramsJson);
+           
+           LOGGER.info("Numero de parametros encontrados: "+toBeReplacedParamList.size());
+           
+           for(Parametros param:toBeReplacedParamList)
+           {
+               Set<String> keys = paramsJson.keySet();
+               for(String key:keys)
+               {
+                   if(param.getNombre().equals(key))
+                   {
+                      LOGGER.info("Parametro:"+param.getNombre()+" con valor nuevo: "+paramsJson.get(key)+" y valor a reemplazar: "+param.getValor());
+                      param.setValor((String) paramsJson.get(key));
+                       try {
+                           paramDao.edit(param);
+                           LOGGER.info("Parametro actualizado exitosamente");
+                       } catch (Exception ex) {
+                           mensaje = "FALLIDO";
+                           LOGGER.warning("Error actualizando parametro");
+                           Logger.getLogger(EscenarioPruebaService.class.getName()).log(Level.SEVERE, null, ex);
+                       }
+                   }
+
+               }
+           }
+           
+           mensaje = "EXITOSA";
+           
+           return mensaje;
     }
 }

@@ -11,5 +11,5 @@ package com.mycompany.testexpositor.objects;
  */
 public enum Estados 
 {
-    IMPEDIDO,EXITOSO,FALLIDO
+    Impedido,Exitoso,Fallido
 }
