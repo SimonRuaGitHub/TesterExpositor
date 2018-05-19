@@ -20,7 +20,7 @@ import org.junit.Ignore;
  *
  * @author simon.rua
  */
-//@Ignore
+@Ignore
 public class ProyectosServiceTest {
     
     private ProyectosService proyServ;

@@ -32,7 +32,7 @@ import org.junit.Ignore;
  *
  * @author simon.rua
  */
-//@Ignore
+@Ignore
 public class CasosPruebaServiceTest {
 
     private static EscenarioPruebaService epServ;

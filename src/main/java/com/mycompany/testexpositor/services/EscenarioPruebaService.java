@@ -134,10 +134,8 @@ public class EscenarioPruebaService implements EscenarioPruebaContract
                 LOGGER.info((String) hashMap.get("codigoCaso"));
                 LOGGER.info((String) hashMap.get("escenario"));
                 mapCasosPrueba.put((String) hashMap.get("codigoCaso"),(String) hashMap.get("escenario"));
-           }
-           
-        for(String cp:mapCasosPrueba.keySet())
-        {
+             
+           String cp = (String) hashMap.get("codigoCaso");
            LOGGER.info("Descripcion: "+mapCasosPrueba.get(cp));
            String escenario = mapCasosPrueba.get(cp).toUpperCase();
            
@@ -166,7 +164,7 @@ public class EscenarioPruebaService implements EscenarioPruebaContract
            {
                LOGGER.info("Ejecutando prueba automatizada de consulta de obras");
                OpenSessionExecution openSessionExecution = new OpenSessionExecution();
-               result = openSessionExecution.executeAutomatedOpeningSession(params);
+
                executed = true;
            }
            
